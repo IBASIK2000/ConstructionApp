@@ -1,0 +1,39 @@
+﻿<Window x:Class="ConstructionApp.AddEditStageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Добавить/Изменить этап" Height="450" Width="600"
+        WindowStartupLocation="CenterScreen" Background="#FF2E2E2E">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" FontSize="20" HorizontalAlignment="Center" Foreground="#FFE9CB80">
+            Добавить/Изменить этап
+        </Label>
+        <StackPanel Grid.Row="1" Margin="20">
+            <Label Foreground="White">Объект:</Label>
+            <ComboBox x:Name="ComboBoxObject" DisplayMemberPath="object_name" SelectedValuePath="object_id" SelectedValue="{Binding object_id}"/>
+            <Label Foreground="White">Название этапа:</Label>
+            <TextBox x:Name="TextBoxName" Text="{Binding stage_name}" MaxLength="100"/>
+            <Label Foreground="White">Плановое начало:</Label>
+            <DatePicker SelectedDate="{Binding stage_planned_start}"/>
+            <Label Foreground="White">Плановое окончание:</Label>
+            <DatePicker SelectedDate="{Binding stage_planned_end}"/>
+            <Label Foreground="White">Фактическое начало:</Label>
+            <DatePicker SelectedDate="{Binding stage_actual_start}"/>
+            <Label Foreground="White">Фактическое окончание:</Label>
+            <DatePicker SelectedDate="{Binding stage_actual_end}"/>
+            <Label Foreground="White">Статус:</Label>
+            <TextBox x:Name="TextBoxStatus" Text="{Binding stage_status}" MaxLength="50"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="ButtonSave" Content="Сохранить" Width="100" Height="30" Margin="10" Background="#FFE9CB80" Click="Save_Click"/>
+            <Button x:Name="ButtonCancel" Content="Отмена" Width="100" Height="30" Margin="10" Background="#FFE9CB80" Click="Cancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

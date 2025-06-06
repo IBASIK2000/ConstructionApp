@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ConstructionDBModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Construction_objects">
+          <Key>
+            <PropertyRef Name="object_id" />
+          </Key>
+          <Property Name="object_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="object_name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="object_address" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="construction_start_date" Type="date" Nullable="false" />
+          <Property Name="construction_end_date" Type="date" />
+          <Property Name="construction_status" Type="nvarchar" MaxLength="50" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Construction_stages">
+          <Key>
+            <PropertyRef Name="stage_id" />
+          </Key>
+          <Property Name="stage_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="object_id" Type="int" Nullable="false" />
+          <Property Name="stage_name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="stage_planned_start" Type="date" Nullable="false" />
+          <Property Name="stage_planned_end" Type="date" Nullable="false" />
+          <Property Name="stage_actual_start" Type="date" />
+          <Property Name="stage_actual_end" Type="date" />
+          <Property Name="stage_status" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Contractors">
+          <Key>
+            <PropertyRef Name="contractor_id" />
+          </Key>
+          <Property Name="contractor_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="contractor_name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="contractor_inn" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="contact_person_name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="contact_phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="contact_email" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Contracts">
+          <Key>
+            <PropertyRef Name="contract_id" />
+          </Key>
+          <Property Name="contract_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="object_id" Type="int" Nullable="false" />
+          <Property Name="contractor_id" Type="int" Nullable="false" />
+          <Property Name="contract_date" Type="date" Nullable="false" />
+          <Property Name="contract_amount" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="contract_number" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Materials">
+          <Key>
+            <PropertyRef Name="material_id" />
+          </Key>
+          <Property Name="material_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="material_name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="material_type" Type="nvarchar" MaxLength="100" />
+          <Property Name="material_unit" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Object_materials">
+          <Key>
+            <PropertyRef Name="object_material_id" />
+          </Key>
+          <Property Name="object_material_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="object_id" Type="int" Nullable="false" />
+          <Property Name="material_id" Type="int" Nullable="false" />
+          <Property Name="material_quantity_used" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="material_delivery_date" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Construct__objec__412EB0B6">
+          <End Role="Construction_objects" Type="Self.Construction_objects" Multiplicity="1" />
+          <End Role="Construction_stages" Type="Self.Construction_stages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Construction_objects">
+              <PropertyRef Name="object_id" />
+            </Principal>
+            <Dependent Role="Construction_stages">
+              <PropertyRef Name="object_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Contracts__contr__3E52440B">
+          <End Role="Contractors" Type="Self.Contractors" Multiplicity="1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contractors">
+              <PropertyRef Name="contractor_id" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="contractor_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Contracts__objec__3D5E1FD2">
+          <End Role="Construction_objects" Type="Self.Construction_objects" Multiplicity="1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Construction_objects">
+              <PropertyRef Name="object_id" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="object_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Object_ma__mater__44FF419A">
+          <End Role="Materials" Type="Self.Materials" Multiplicity="1" />
+          <End Role="Object_materials" Type="Self.Object_materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materials">
+              <PropertyRef Name="material_id" />
+            </Principal>
+            <Dependent Role="Object_materials">
+              <PropertyRef Name="material_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Object_ma__objec__440B1D61">
+          <End Role="Construction_objects" Type="Self.Construction_objects" Multiplicity="1" />
+          <End Role="Object_materials" Type="Self.Object_materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Construction_objects">
+              <PropertyRef Name="object_id" />
+            </Principal>
+            <Dependent Role="Object_materials">
+              <PropertyRef Name="object_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ConstructionDBModelContainer">
+          <EntitySet Name="Construction_objects" EntityType="Self.Construction_objects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Construction_stages" EntityType="Self.Construction_stages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contractors" EntityType="Self.Contractors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contracts" EntityType="Self.Contracts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Materials" EntityType="Self.Materials" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Object_materials" EntityType="Self.Object_materials" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Construct__objec__412EB0B6" Association="Self.FK__Construct__objec__412EB0B6">
+            <End Role="Construction_objects" EntitySet="Construction_objects" />
+            <End Role="Construction_stages" EntitySet="Construction_stages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Contracts__contr__3E52440B" Association="Self.FK__Contracts__contr__3E52440B">
+            <End Role="Contractors" EntitySet="Contractors" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Contracts__objec__3D5E1FD2" Association="Self.FK__Contracts__objec__3D5E1FD2">
+            <End Role="Construction_objects" EntitySet="Construction_objects" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Object_ma__mater__44FF419A" Association="Self.FK__Object_ma__mater__44FF419A">
+            <End Role="Materials" EntitySet="Materials" />
+            <End Role="Object_materials" EntitySet="Object_materials" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Object_ma__objec__440B1D61" Association="Self.FK__Object_ma__objec__440B1D61">
+            <End Role="Construction_objects" EntitySet="Construction_objects" />
+            <End Role="Object_materials" EntitySet="Object_materials" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ConstructionDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Construction_objects">
+          <Key>
+            <PropertyRef Name="object_id" />
+          </Key>
+          <Property Name="object_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="object_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="object_address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="construction_start_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="construction_end_date" Type="DateTime" Precision="0" />
+          <Property Name="construction_status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Construction_stages" Relationship="Self.FK__Construct__objec__412EB0B6" FromRole="Construction_objects" ToRole="Construction_stages" />
+          <NavigationProperty Name="Contracts" Relationship="Self.FK__Contracts__objec__3D5E1FD2" FromRole="Construction_objects" ToRole="Contracts" />
+          <NavigationProperty Name="Object_materials" Relationship="Self.FK__Object_ma__objec__440B1D61" FromRole="Construction_objects" ToRole="Object_materials" />
+        </EntityType>
+        <EntityType Name="Construction_stages">
+          <Key>
+            <PropertyRef Name="stage_id" />
+          </Key>
+          <Property Name="stage_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="object_id" Type="Int32" Nullable="false" />
+          <Property Name="stage_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="stage_planned_start" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="stage_planned_end" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="stage_actual_start" Type="DateTime" Precision="0" />
+          <Property Name="stage_actual_end" Type="DateTime" Precision="0" />
+          <Property Name="stage_status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Construction_objects" Relationship="Self.FK__Construct__objec__412EB0B6" FromRole="Construction_stages" ToRole="Construction_objects" />
+        </EntityType>
+        <EntityType Name="Contractors">
+          <Key>
+            <PropertyRef Name="contractor_id" />
+          </Key>
+          <Property Name="contractor_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="contractor_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="contractor_inn" Type="String" MaxLength="12" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="contact_person_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="contact_phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="contact_email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Contracts" Relationship="Self.FK__Contracts__contr__3E52440B" FromRole="Contractors" ToRole="Contracts" />
+        </EntityType>
+        <EntityType Name="Contracts">
+          <Key>
+            <PropertyRef Name="contract_id" />
+          </Key>
+          <Property Name="contract_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="object_id" Type="Int32" Nullable="false" />
+          <Property Name="contractor_id" Type="Int32" Nullable="false" />
+          <Property Name="contract_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="contract_amount" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="contract_number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Construction_objects" Relationship="Self.FK__Contracts__objec__3D5E1FD2" FromRole="Contracts" ToRole="Construction_objects" />
+          <NavigationProperty Name="Contractors" Relationship="Self.FK__Contracts__contr__3E52440B" FromRole="Contracts" ToRole="Contractors" />
+        </EntityType>
+        <EntityType Name="Materials">
+          <Key>
+            <PropertyRef Name="material_id" />
+          </Key>
+          <Property Name="material_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="material_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="material_type" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="material_unit" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Object_materials" Relationship="Self.FK__Object_ma__mater__44FF419A" FromRole="Materials" ToRole="Object_materials" />
+        </EntityType>
+        <EntityType Name="Object_materials">
+          <Key>
+            <PropertyRef Name="object_material_id" />
+          </Key>
+          <Property Name="object_material_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="object_id" Type="Int32" Nullable="false" />
+          <Property Name="material_id" Type="Int32" Nullable="false" />
+          <Property Name="material_quantity_used" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="material_delivery_date" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Construction_objects" Relationship="Self.FK__Object_ma__objec__440B1D61" FromRole="Object_materials" ToRole="Construction_objects" />
+          <NavigationProperty Name="Materials" Relationship="Self.FK__Object_ma__mater__44FF419A" FromRole="Object_materials" ToRole="Materials" />
+        </EntityType>
+        <Association Name="FK__Construct__objec__412EB0B6">
+          <End Role="Construction_objects" Type="Self.Construction_objects" Multiplicity="1" />
+          <End Role="Construction_stages" Type="Self.Construction_stages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Construction_objects">
+              <PropertyRef Name="object_id" />
+            </Principal>
+            <Dependent Role="Construction_stages">
+              <PropertyRef Name="object_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Contracts__objec__3D5E1FD2">
+          <End Role="Construction_objects" Type="Self.Construction_objects" Multiplicity="1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Construction_objects">
+              <PropertyRef Name="object_id" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="object_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Object_ma__objec__440B1D61">
+          <End Role="Construction_objects" Type="Self.Construction_objects" Multiplicity="1" />
+          <End Role="Object_materials" Type="Self.Object_materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Construction_objects">
+              <PropertyRef Name="object_id" />
+            </Principal>
+            <Dependent Role="Object_materials">
+              <PropertyRef Name="object_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Contracts__contr__3E52440B">
+          <End Role="Contractors" Type="Self.Contractors" Multiplicity="1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contractors">
+              <PropertyRef Name="contractor_id" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="contractor_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Object_ma__mater__44FF419A">
+          <End Role="Materials" Type="Self.Materials" Multiplicity="1" />
+          <End Role="Object_materials" Type="Self.Object_materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materials">
+              <PropertyRef Name="material_id" />
+            </Principal>
+            <Dependent Role="Object_materials">
+              <PropertyRef Name="material_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ConstructionDB" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Construction_objects" EntityType="Self.Construction_objects" />
+          <EntitySet Name="Construction_stages" EntityType="Self.Construction_stages" />
+          <EntitySet Name="Contractors" EntityType="Self.Contractors" />
+          <EntitySet Name="Contracts" EntityType="Self.Contracts" />
+          <EntitySet Name="Materials" EntityType="Self.Materials" />
+          <EntitySet Name="Object_materials" EntityType="Self.Object_materials" />
+          <AssociationSet Name="FK__Construct__objec__412EB0B6" Association="Self.FK__Construct__objec__412EB0B6">
+            <End Role="Construction_objects" EntitySet="Construction_objects" />
+            <End Role="Construction_stages" EntitySet="Construction_stages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Contracts__objec__3D5E1FD2" Association="Self.FK__Contracts__objec__3D5E1FD2">
+            <End Role="Construction_objects" EntitySet="Construction_objects" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Object_ma__objec__440B1D61" Association="Self.FK__Object_ma__objec__440B1D61">
+            <End Role="Construction_objects" EntitySet="Construction_objects" />
+            <End Role="Object_materials" EntitySet="Object_materials" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Contracts__contr__3E52440B" Association="Self.FK__Contracts__contr__3E52440B">
+            <End Role="Contractors" EntitySet="Contractors" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Object_ma__mater__44FF419A" Association="Self.FK__Object_ma__mater__44FF419A">
+            <End Role="Materials" EntitySet="Materials" />
+            <End Role="Object_materials" EntitySet="Object_materials" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ConstructionDBModelContainer" CdmEntityContainer="ConstructionDB">
+          <EntitySetMapping Name="Construction_objects">
+            <EntityTypeMapping TypeName="ConstructionDBModel.Construction_objects">
+              <MappingFragment StoreEntitySet="Construction_objects">
+                <ScalarProperty Name="object_id" ColumnName="object_id" />
+                <ScalarProperty Name="object_name" ColumnName="object_name" />
+                <ScalarProperty Name="object_address" ColumnName="object_address" />
+                <ScalarProperty Name="construction_start_date" ColumnName="construction_start_date" />
+                <ScalarProperty Name="construction_end_date" ColumnName="construction_end_date" />
+                <ScalarProperty Name="construction_status" ColumnName="construction_status" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Construction_stages">
+            <EntityTypeMapping TypeName="ConstructionDBModel.Construction_stages">
+              <MappingFragment StoreEntitySet="Construction_stages">
+                <ScalarProperty Name="stage_id" ColumnName="stage_id" />
+                <ScalarProperty Name="object_id" ColumnName="object_id" />
+                <ScalarProperty Name="stage_name" ColumnName="stage_name" />
+                <ScalarProperty Name="stage_planned_start" ColumnName="stage_planned_start" />
+                <ScalarProperty Name="stage_planned_end" ColumnName="stage_planned_end" />
+                <ScalarProperty Name="stage_actual_start" ColumnName="stage_actual_start" />
+                <ScalarProperty Name="stage_actual_end" ColumnName="stage_actual_end" />
+                <ScalarProperty Name="stage_status" ColumnName="stage_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contractors">
+            <EntityTypeMapping TypeName="ConstructionDBModel.Contractors">
+              <MappingFragment StoreEntitySet="Contractors">
+                <ScalarProperty Name="contractor_id" ColumnName="contractor_id" />
+                <ScalarProperty Name="contractor_name" ColumnName="contractor_name" />
+                <ScalarProperty Name="contractor_inn" ColumnName="contractor_inn" />
+                <ScalarProperty Name="contact_person_name" ColumnName="contact_person_name" />
+                <ScalarProperty Name="contact_phone" ColumnName="contact_phone" />
+                <ScalarProperty Name="contact_email" ColumnName="contact_email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contracts">
+            <EntityTypeMapping TypeName="ConstructionDBModel.Contracts">
+              <MappingFragment StoreEntitySet="Contracts">
+                <ScalarProperty Name="contract_id" ColumnName="contract_id" />
+                <ScalarProperty Name="object_id" ColumnName="object_id" />
+                <ScalarProperty Name="contractor_id" ColumnName="contractor_id" />
+                <ScalarProperty Name="contract_date" ColumnName="contract_date" />
+                <ScalarProperty Name="contract_amount" ColumnName="contract_amount" />
+                <ScalarProperty Name="contract_number" ColumnName="contract_number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materials">
+            <EntityTypeMapping TypeName="ConstructionDBModel.Materials">
+              <MappingFragment StoreEntitySet="Materials">
+                <ScalarProperty Name="material_id" ColumnName="material_id" />
+                <ScalarProperty Name="material_name" ColumnName="material_name" />
+                <ScalarProperty Name="material_type" ColumnName="material_type" />
+                <ScalarProperty Name="material_unit" ColumnName="material_unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Object_materials">
+            <EntityTypeMapping TypeName="ConstructionDBModel.Object_materials">
+              <MappingFragment StoreEntitySet="Object_materials">
+                <ScalarProperty Name="object_material_id" ColumnName="object_material_id" />
+                <ScalarProperty Name="object_id" ColumnName="object_id" />
+                <ScalarProperty Name="material_id" ColumnName="material_id" />
+                <ScalarProperty Name="material_quantity_used" ColumnName="material_quantity_used" />
+                <ScalarProperty Name="material_delivery_date" ColumnName="material_delivery_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

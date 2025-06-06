@@ -1,0 +1,35 @@
+﻿<Window x:Class="ConstructionApp.AddEditContractWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Добавить/Изменить контракт" Height="400" Width="600"
+        WindowStartupLocation="CenterScreen" Background="#FF2E2E2E">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" FontSize="20" HorizontalAlignment="Center" Foreground="#FFE9CB80">
+            Добавить/Изменить контракт
+        </Label>
+        <StackPanel Grid.Row="1" Margin="20">
+            <Label Foreground="White">Объект:</Label>
+            <ComboBox x:Name="ComboBoxObject" DisplayMemberPath="object_name" SelectedValuePath="object_id" SelectedValue="{Binding object_id}"/>
+            <Label Foreground="White">Подрядчик:</Label>
+            <ComboBox x:Name="ComboBoxContractor" DisplayMemberPath="contractor_name" SelectedValuePath="contractor_id" SelectedValue="{Binding contractor_id}"/>
+            <Label Foreground="White">Дата контракта:</Label>
+            <DatePicker SelectedDate="{Binding contract_date}"/>
+            <Label Foreground="White">Сумма:</Label>
+            <TextBox x:Name="TextBoxAmount" Text="{Binding contract_amount}" PreviewTextInput="NumberValidation"/>
+            <Label Foreground="White">Номер контракта:</Label>
+            <TextBox x:Name="TextBoxNumber" Text="{Binding contract_number}" MaxLength="50"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="ButtonSave" Content="Сохранить" Width="100" Height="30" Margin="10" Background="#FFE9CB80" Click="Save_Click"/>
+            <Button x:Name="ButtonCancel" Content="Отмена" Width="100" Height="30" Margin="10" Background="#FFE9CB80" Click="Cancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
